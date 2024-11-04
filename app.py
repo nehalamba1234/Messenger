@@ -1,5 +1,6 @@
 from flask import Flask, render_template,request, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room
+import os
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -49,4 +50,5 @@ def handle_leave_room_event(data):
 
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True,port=5000)
+    port = int(os.environ.get('PORT', 5000))  # Use PORT environment variable or fallback to 5000  
+    socketio.run(app, debug=True, host='0.0.0.0', port=port)  # Bind to 0.0.0.0 and use the port variable  
