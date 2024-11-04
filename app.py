@@ -4,7 +4,7 @@ from flask_socketio import SocketIO, join_room, leave_room
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-connected_users = {}
+connected_users = 0
 
 @app.route('/')
 def home():
@@ -15,7 +15,6 @@ def home():
 def chat():
     username = request.args.get('username')
     room = request.args.get('room')
-
     if username and room:
         return render_template('chat.html', username=username, room=room)
     else:
@@ -32,17 +31,22 @@ def handle_send_message_event(data):
 
 @socketio.on('join_room')
 def handle_join_room_event(data):
+    app.logger.info("hadnle room")
     app.logger.info("{} has joined the room {}".format(data['username'], data['room']))
-    join_room(data['room'])
-    socketio.emit('join_room_announcement', data, room=data['room'])
+    global connected_users  
+    connected_users += 1  
+    join_room(data['room'])  
+    socketio.emit('join_room_announcement', {**data, "onlineUser": connected_users}, room=data['room'])  
 
 
 @socketio.on('leave_room')
 def handle_leave_room_event(data):
     app.logger.info("{} has left the room {}".format(data['username'], data['room']))
     leave_room(data['room'])
+    global connected_users  
+    connected_users -= 1
     socketio.emit('leave_room_announcement', data, room=data['room'])
 
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=True,port=5000)

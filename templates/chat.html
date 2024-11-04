@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Chat App</title>
+    <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
 <h1>Welcome to chat room {{ room }}</h1>
-
+<div id = "online_users"></div>
 <div id="messages"></div>
 
 <form id="message_input_form">
@@ -57,6 +58,8 @@
 
     socket.on('join_room_announcement', function (data) {
         console.log(data);
+        document.getElementById('online_users').innerHTML = `<h1>Online Users: ${data.onlineUser}</h1>`;  
+
         if (data.username !== "{{ username }}") {
             const newNode = document.createElement('div');
             newNode.innerHTML = `<b>${data.username}</b> has joined the room`;
@@ -66,6 +69,8 @@
 
     socket.on('leave_room_announcement', function (data) {
         console.log(data);
+        document.getElementById('online_users').innerHTML = `<h1>Online Users: ${data.onlineUser}</h1>`;  
+
         const newNode = document.createElement('div');
         newNode.innerHTML = `<b>${data.username}</b> has left the room`;
         document.getElementById('messages').appendChild(newNode);
