@@ -1,0 +1,90 @@
+<!DOCTYPE html>  
+<html lang="en">  
+
+<head>  
+    <meta charset="UTF-8">  
+    <title>Chat App - Sign Up</title>  
+    <style>  
+        body {  
+            font-family: Arial, sans-serif;  
+            background-color: #2C2C2C; /* Greyish black background */  
+            color: white; /* White text */  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            height: 100vh;  
+            margin: 0;  
+        }  
+
+        .container {  
+            background-color: #444; /* Darker grey for the form background */  
+            padding: 20px;  
+            border-radius: 8px;  
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);  
+            width: 300px; /* Set a fixed width for form container */  
+        }  
+
+        h1 {  
+            text-align: center;  
+            margin-bottom: 20px;  
+        }  
+
+        label {  
+            display: block;  
+            margin-bottom: 5px;  
+        }  
+
+        input {  
+            width: 90%;  
+            padding: 10px;  
+            margin-bottom: 15px;  
+            border: 1px solid #007bff; /* Border color */  
+            border-radius: 4px;  
+            background-color: #555; /* Input background color */  
+            color: white; /* Input text color */  
+        }  
+
+        input:focus {  
+            border-color: #007bff; /* Change border color on focus */  
+            outline: none; /* Remove default outline */  
+            background-color: #666; /* Change background color on focus */  
+        }  
+
+        button {  
+            width: 100%;  
+            padding: 10px;  
+            border: none;  
+            border-radius: 4px;  
+            background-color: #007bff; /* Button background color */  
+            color: white; /* Button text color */  
+            font-size: 16px;  
+            cursor: pointer; /* Change cursor to pointer */  
+            transition: background-color 0.3s;  
+        }  
+
+        button:hover {  
+            background-color: #0056b3; /* Darker blue when hovered */  
+        }  
+
+        h3 {  
+            text-align: center;  
+            color: yellow; /* Change message color for visibility */  
+        }  
+    </style>  
+</head>  
+
+<body>  
+    <div class="container">  
+        <h1>Sign Up</h1>  
+        <h3>{{ message }}</h3>  
+        <form method="post" action="/signup">  
+            <label for="username">Username</label>  
+            <input type="text" id="username" name="username" required>  
+            <label for="password">Password</label>  
+            <input type="password" id="password" name="password" required>  
+            <button type="submit">Sign Up</button>  
+        </form>  
+    </div>  
+</body>  
+
+</html>
