@@ -1,79 +1,104 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Chat App</title>
-    <link rel="stylesheet" href="static/style.css">
-</head>
-<body>
-<h1>Welcome to chat room {{ room }}</h1>
-<div id = "online_users"></div>
-<div id="messages"></div>
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <title>Chat App</title>  
+    <link rel="stylesheet" href="static/style.css">  
+    <style>  
+        /* Additional styles for the logout button */  
+        #logout {  
+            position: absolute;  
+            top: 2px; /* Adjust this based on your design */  
+            right: 2px; /* Adjust this based on your design */  
+            background-color: #ff4d4d; /* Red logout button */  
+            color: white; /* White text */  
+            border: none;  
+            border-radius: 5px;  
+            padding: 10px 15px;  
+            cursor: pointer;  
+            font-size: 10px;  
+            transition: background-color 0.3s;  
+        }  
 
-<form id="message_input_form">
-    <input type="text" id="message_input" placeholder="Enter your message here">
-    <button type="submit">Send</button>
-</form>
-</body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
-<script>
-    const socket = io();
+        #logout:hover {  
+            background-color: #e60000; /* Darker red on hover */  
+        }  
+    </style>  
+</head>  
+<body>  
+    <h1>Welcome to chat room {{ room }}</h1>  
+    <button id="logout" onclick="logout()">Logout</button> <!-- Added Logout button -->  
+    <div id="online_users"></div>  
+    <div id="messages"></div>  
 
-    socket.on('connect', function () {
-        socket.emit('join_room', {
-            username: "{{ username }}",
-            room: "{{ room }}"
-        });
+    <form id="message_input_form">  
+        <input type="text" id="message_input" placeholder="Enter your message here">  
+        <button type="submit">Send</button>  
+    </form>  
+    
+    <script>  
+        function logout() {  
+            window.location.href = "/logout"; // Redirect to logout route  
+        }  
 
-        let message_input = document.getElementById('message_input');
+        const socket = io();  
 
-        document.getElementById('message_input_form').onsubmit = function (e) {
-            e.preventDefault();
-            let message = message_input.value.trim();
-            if (message.length) {
-                socket.emit('send_message', {
-                    username: "{{ username }}",
-                    room: "{{ room }}",
-                    message: message
-                })
-            }
-            message_input.value = '';
-            message_input.focus();
-        }
-    });
+        socket.on('connect', function () {  
+            socket.emit('join_room', {  
+                username: "{{ username }}",  
+                room: "{{ room }}"  
+            });  
 
-    window.onbeforeunload = function () {
-        socket.emit('leave_room', {
-            username: "{{ username }}",
-            room: "{{ room }}"
-        })
-    };
+            let message_input = document.getElementById('message_input');  
 
-    socket.on('receive_message', function (data) {
-        console.log(data);
-        const newNode = document.createElement('div');
-        newNode.innerHTML = `<b>${data.username}:&nbsp;</b> ${data.message}`;
-        document.getElementById('messages').appendChild(newNode);
-    });
+            document.getElementById('message_input_form').onsubmit = function (e) {  
+                e.preventDefault();  
+                let message = message_input.value.trim();  
+                if (message.length) {  
+                    socket.emit('send_message', {  
+                        username: "{{ username }}",  
+                        room: "{{ room }}",  
+                        message: message  
+                    })  
+                }  
+                message_input.value = '';  
+                message_input.focus();  
+            }  
+        });  
 
-    socket.on('join_room_announcement', function (data) {
-        console.log(data);
-        document.getElementById('online_users').innerHTML = `<h1>Online Users: ${data.onlineUser}</h1>`;  
+        window.onbeforeunload = function () {  
+            socket.emit('leave_room', {  
+                username: "{{ username }}",  
+                room: "{{ room }}"  
+            })  
+        };  
 
-        if (data.username !== "{{ username }}") {
-            const newNode = document.createElement('div');
-            newNode.innerHTML = `<b>${data.username}</b> has joined the room`;
-            document.getElementById('messages').appendChild(newNode);
-        }
-    });
+        socket.on('receive_message', function (data) {  
+            console.log(data);  
+            const newNode = document.createElement('div');  
+            newNode.innerHTML = `<b>${data.username}:&nbsp;</b> ${data.message}`;  
+            document.getElementById('messages').appendChild(newNode);  
+        });  
 
-    socket.on('leave_room_announcement', function (data) {
-        console.log(data);
-        document.getElementById('online_users').innerHTML = `<h1>Online Users: ${data.onlineUser}</h1>`;  
+        socket.on('join_room_announcement', function (data) {  
+            console.log(data);  
+            document.getElementById('online_users').innerHTML = `<h1>Online Users: ${data.onlineUser}</h1>`;  
 
-        const newNode = document.createElement('div');
-        newNode.innerHTML = `<b>${data.username}</b> has left the room`;
-        document.getElementById('messages').appendChild(newNode);
-    });
-</script>
+            if (data.username !== "{{ username }}") {  
+                const newNode = document.createElement('div');  
+                newNode.innerHTML = `<b>${data.username}</b> has joined the room`;  
+                document.getElementById('messages').appendChild(newNode);  
+            }  
+        });  
+
+        socket.on('leave_room_announcement', function (data) {  
+            console.log(data);  
+            document.getElementById('online_users').innerHTML = `<h1>Online Users: ${data.onlineUser}</h1>`;  
+
+            const newNode = document.createElement('div');  
+            newNode.innerHTML = `<b>${data.username}</b> has left the room`;  
+            document.getElementById('messages').appendChild(newNode);  
+        });  
+    </script>  
+</body>  
 </html>

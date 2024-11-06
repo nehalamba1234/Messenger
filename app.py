@@ -21,7 +21,8 @@ def home():
 @app.route('/login',methods=['GET','POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        return render_template("index.html")
+
     message = '' 
     if request.method == 'POST':
         username = request.form.get('username')
@@ -109,5 +110,5 @@ def handle_leave_room_event(data):
 def load_user(username):
     return 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5003))  # Use PORT environment variable or fallback to 5000  
+    port = int(os.environ.get('PORT', 5004))  # Use PORT environment variable or fallback to 5000  
     socketio.run(app, debug=True, host='0.0.0.0', port=port)  # Bind to 0.0.0.0 and use the port variable  
