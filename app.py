@@ -21,7 +21,7 @@ def home():
 @app.route('/login',methods=['GET','POST'])
 def login():
     if current_user.is_authenticated:
-        return render_template("index.html")
+        return render_template("room.html")
 
     message = '' 
     if request.method == 'POST':

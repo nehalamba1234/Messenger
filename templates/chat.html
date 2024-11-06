@@ -31,11 +31,11 @@
     <div id="online_users"></div>  
     <div id="messages"></div>  
 
-    <form id="message_input_form">  
+    <form id="message_input_form",action = '#'>  
         <input type="text" id="message_input" placeholder="Enter your message here">  
         <button type="submit">Send</button>  
     </form>  
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
     <script>  
         function logout() {  
             window.location.href = "/logout"; // Redirect to logout route  
