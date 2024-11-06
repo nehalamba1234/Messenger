@@ -10,7 +10,7 @@
 <body>  
     <div class="container">  
         <h1>Welcome to the Chat Application</h1> 
-        <h3> Hi !{% if current_user.is_authenticated %}{{ current_user.username}}{% else %} Guest {% endif%}</h3>
+        <h3> Hi {% if current_user.is_authenticated %}{{ current_user.username}}{% else %} Guest {% endif%}</h3>
         <form action = '/chat'>
             <div>
                     <label>Username</label>
